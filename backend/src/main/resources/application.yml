@@ -19,6 +19,7 @@ spring:
       - optional:file:.env[.properties]
       - application-database.yml
       - application-i18n.yml
+      - application-security.yml
 
 ##############################
 #### SPRING DEBUG SETTING ####
