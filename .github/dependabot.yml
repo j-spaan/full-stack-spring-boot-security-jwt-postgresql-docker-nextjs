@@ -6,13 +6,13 @@
 version: 2
 updates:
   - package-ecosystem: "maven"
-    directory: "/"
+    directory: "/backend/"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
 
   - package-ecosystem: "github-actions"
-    directory: "/"
+    directory: "/backend/"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
