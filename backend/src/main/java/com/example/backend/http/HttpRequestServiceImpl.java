@@ -13,6 +13,17 @@ import java.security.Principal;
  * or the principal (current logged-in user).
  * This class contains the methods to retrieve data from the headers.
  *
+ * <p>Dependencies:</p>
+ * <ul>
+ *   <li>{@link I18nService}: Service for internationalized messages.</li>
+ *   <li>{@link HttpServletRequest}: Represents an HTTP request and provides methods to access request parameters, headers, and attributes in a web application.</li>
+ * </ul>
+ *
+ * <ul>
+ *   <li>{@code @Slf4j}: Enables logging using SLF4J.</li>
+ *   <li>{@code @Service}: Marks this class as a Spring service.</li>
+ * </ul>
+ *
  * @author Jeffrey Spaan
  * @since 2024-06-10
  */
