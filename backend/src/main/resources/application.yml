@@ -18,6 +18,7 @@ spring:
     import:
       - optional:file:.env[.properties]
       - application-database.yml
+      - application-i18n.yml
 
 ##############################
 #### SPRING DEBUG SETTING ####
