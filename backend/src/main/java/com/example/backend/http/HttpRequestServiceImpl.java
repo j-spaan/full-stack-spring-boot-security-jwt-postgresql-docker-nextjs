@@ -19,6 +19,7 @@ import java.security.Principal;
  *   <li>{@link HttpServletRequest}: Represents an HTTP request and provides methods to access request parameters, headers, and attributes in a web application.</li>
  * </ul>
  *
+ * <p>Annotations:</p>
  * <ul>
  *   <li>{@code @Slf4j}: Enables logging using SLF4J.</li>
  *   <li>{@code @Service}: Marks this class as a Spring service.</li>
@@ -27,7 +28,6 @@ import java.security.Principal;
  * @author Jeffrey Spaan
  * @since 2024-06-10
  */
-
 @Slf4j
 @Service
 public record HttpRequestServiceImpl(
