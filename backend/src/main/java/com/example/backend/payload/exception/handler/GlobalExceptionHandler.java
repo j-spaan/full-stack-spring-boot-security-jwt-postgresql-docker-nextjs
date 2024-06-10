@@ -16,6 +16,22 @@ import java.net.URI;
  * Uses Spring's @ControllerAdvice to centralize exception handling logic.
  * It handles specific exceptions and provides a unified response structure.
  *
+ * <p>Configured with the following properties:</p>
+ * <ul>
+ *   <li><code>spring.application.error-uri</code>: The configured error URI.</li>
+ * </ul>
+ *
+ * <p>Dependencies:</p>
+ * <ul>
+ *   <li>{@link I18nService}: Service for internationalized messages.</li>
+ * </ul>
+ *
+ * <p>Annotations:</p>
+ * <ul>
+ *   <li>{@code @ControllerAdvice}: Provides global exception handling and advice for Spring MVC controllers.</li>
+ *   <li>{@code @RequiredArgsConstructor}: Generates a constructor with required arguments.</li>
+ * </ul>
+ *
  * @author Jeffrey Spaan
  * @since 2024-06-10
  */

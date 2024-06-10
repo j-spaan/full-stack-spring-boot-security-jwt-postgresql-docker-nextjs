@@ -19,6 +19,34 @@ import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 
+/**
+ * Implementation of the {@link JwtService} interface providing JWT operations.
+ * This service handles the creation, validation, and extraction of claims from JWT tokens.
+ *
+ * <p>Configured with the following properties:</p>
+ * <ul>
+ *   <li><code>application.security.jwt.issuer</code>: The issuer of the JWT.</li>
+ *   <li><code>application.security.jwt.secret-key</code>: The secret key used for signing JWTs.</li>
+ *   <li><code>application.security.jwt.expiration</code>: The expiration time of the JWT in milliseconds.</li>
+ *   <li><code>application.security.jwt.refresh-token.expiration</code>: The expiration time of the refresh token in milliseconds.</li>
+ * </ul>
+ *
+ * <p>Dependencies:</p>
+ * <ul>
+ *   <li>{@link I18nService}: Service for internationalized messages.</li>
+ *   <li>{@link HttpRequestService}: Service for HTTP request-related information.</li>
+ * </ul>
+ *
+ * <p>Annotations:</p>
+ * <ul>
+ *   <li>{@code @Slf4j}: Enables logging using SLF4J.</li>
+ *   <li>{@code @Service}: Marks this class as a Spring service.</li>
+ *   <li>{@code @RequiredArgsConstructor}: Generates a constructor with required arguments.</li>
+ * </ul>
+ *
+ * @author Jeffrey Spaan
+ * @since 2024-06-10
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -36,15 +64,36 @@ public class JwtServiceImpl implements JwtService {
   private final I18nService i18nService;
   private final HttpRequestService httpRequestService;
 
+  /**
+   * Extracts the subject (typically the user email) from the given JWT token.
+   *
+   * @param jwt the JWT token
+   * @return the subject extracted from the JWT token
+   */
   @Override
   public String extractSubject(String jwt) {
     return extractClaim(jwt, Claims::getSubject);
   }
 
+  /**
+   * Extracts the issuer from the given JWT token.
+   *
+   * @param jwt the JWT token
+   * @return the issuer extracted from the JWT token
+   */
   private String extractIssuer(String jwt) {
     return extractClaim(jwt, Claims::getIssuer);
   }
 
+  /**
+   * Extracts a specific claim from the given JWT token using the
+   * provided claims resolver function.
+   *
+   * @param <T> the type of the claim
+   * @param jwt the JWT token
+   * @param claimsResolver the function to extract the claim
+   * @return the claim extracted from the JWT token
+   */
   private <T> T extractClaim(String jwt, Function<Claims, T> claimsResolver) {
     try {
       return claimsResolver.apply(extractAllClaims(jwt));
@@ -63,11 +112,24 @@ public class JwtServiceImpl implements JwtService {
     return null;
   }
 
+  /**
+   * Generates a JWT token with the given email as the subject.
+   *
+   * @param email the email to be used as the subject
+   * @return the generated JWT token
+   */
   @Override
   public String generateToken(String email) {
     return generateToken(new HashMap<>(), email);
   }
 
+  /**
+   * Generates a JWT token with the given extra claims and email as the subject.
+   *
+   * @param extraClaims additional claims to be included in the token
+   * @param email the email to be used as the subject
+   * @return the generated JWT token
+   */
   private String generateToken(
       Map<String, Object> extraClaims,
       String email
@@ -75,6 +137,12 @@ public class JwtServiceImpl implements JwtService {
     return buildToken(extraClaims, email, jwtExpiration);
   }
 
+  /**
+   * Generates a refresh token with the given email as the subject.
+   *
+   * @param email the email to be used as the subject
+   * @return the generated refresh token
+   */
   @Override
   public String generateRefreshToken(
       String email
@@ -82,6 +150,14 @@ public class JwtServiceImpl implements JwtService {
     return buildToken(new HashMap<>(), email, refreshExpiration);
   }
 
+  /**
+   * Builds a JWT token with the given extra claims, email, and expiration time.
+   *
+   * @param extraClaims additional claims to be included in the token
+   * @param email the email to be used as the subject
+   * @param expiration the expiration time in milliseconds
+   * @return the generated JWT token
+   */
   private String buildToken(
           Map<String, Object> extraClaims,
           String email,
@@ -98,6 +174,13 @@ public class JwtServiceImpl implements JwtService {
             .compact();
   }
 
+  /**
+   * Validates the given JWT token against the provided email.
+   *
+   * @param jwt the JWT token
+   * @param email the email to validate against
+   * @return true if the token is valid, false otherwise
+   */
   @Override
   public boolean isTokenValid(String jwt, String email) {
     final String jwtSubject = extractSubject(jwt);
@@ -109,6 +192,12 @@ public class JwtServiceImpl implements JwtService {
     return false;
   }
 
+  /**
+   * Checks if the given JWT token is expired.
+   *
+   * @param token the JWT token
+   * @return true if the token is expired, false otherwise
+   */
   private boolean isTokenExpired(String token) {
     Date expirationDate = extractExpiration(token);
 
@@ -118,10 +207,22 @@ public class JwtServiceImpl implements JwtService {
     return false;
   }
 
+  /**
+   * Extracts the expiration date from the given JWT token.
+   *
+   * @param token the JWT token
+   * @return the expiration date extracted from the JWT token
+   */
   private Date extractExpiration(String token) {
     return extractClaim(token, Claims::getExpiration);
   }
 
+  /**
+   * Extracts all claims from the given JWT token.
+   *
+   * @param token the JWT token
+   * @return the claims extracted from the JWT token
+   */
   private Claims extractAllClaims(String token) {
     return Jwts
             .parser()
@@ -131,11 +232,22 @@ public class JwtServiceImpl implements JwtService {
             .getPayload();
   }
 
+  /**
+   * Gets the signing key for the JWT.
+   *
+   * @return the signing key
+   */
   private SecretKey getSignInKey() {
     byte[] keyBytes = Decoders.BASE64.decode(secretKey);
     return Keys.hmacShaKeyFor(keyBytes);
   }
 
+  /**
+   * Logs an error message using the internationalization service and HTTP request service.
+   *
+   * @param code the code for the log message
+   * @param error the error message to log
+   */
   private void logErrorMessage(String code, String error) {
     log.error(i18nService.getLogMessage(code),
             httpRequestService.getIp(),
