@@ -18,7 +18,7 @@ import java.net.URI;
  *
  * <p>Configured with the following properties:</p>
  * <ul>
- *   <li><code>spring.application.error-uri</code>: The configured error URI.</li>
+ *   <li><code>spring.application.error-uri</code>: The configured error URI which is set within the application.yml file.</li>
  * </ul>
  *
  * <p>Dependencies:</p>
@@ -39,7 +39,6 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
-    // URI for error is set within the application.yml file
     @Value("${spring.application.error-uri}")
     private String errorUri;
 
