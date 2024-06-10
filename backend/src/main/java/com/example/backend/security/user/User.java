@@ -1,5 +1,6 @@
 package com.example.backend.security.user;
 
+import com.example.backend.config.AppConstants;
 import com.example.backend.security.role.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = AppConstants.Table.USERS)
 public class User implements UserDetails {
 
   @Id
