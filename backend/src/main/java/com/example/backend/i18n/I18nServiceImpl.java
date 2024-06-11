@@ -2,6 +2,7 @@ package com.example.backend.i18n;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.lang.Nullable;
@@ -43,6 +44,7 @@ public class I18nServiceImpl implements I18nService {
 
     private final HttpServletRequest request;
 
+    @Setter
     @Value("${spring.messages.logging-language}")
     private String loggingLanguage;
 
