@@ -1,7 +1,6 @@
 package com.example.backend.http;
 
 import com.example.backend.i18n.I18nService;
-import com.example.backend.i18n.I18nServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
