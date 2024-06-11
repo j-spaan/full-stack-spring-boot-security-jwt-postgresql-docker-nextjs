@@ -32,7 +32,7 @@ import java.security.Principal;
 @Service
 public record HttpRequestServiceImpl(
         HttpServletRequest httpServletRequest,
-        I18nService i18NService
+        I18nService i18nService
 ) implements HttpRequestService {
 
     /**
@@ -43,7 +43,7 @@ public record HttpRequestServiceImpl(
     public String getUsername() {
         Principal httpUserPrincipal = httpServletRequest.getUserPrincipal();
         if (httpUserPrincipal == null) {
-            log.error(i18NService.getLogMessage("log.http.si.username.not.found"));
+            log.error(i18nService.getLogMessage("log.http.si.username.not.found"));
             return null;
         }
         return httpUserPrincipal.getName();
