@@ -2,16 +2,10 @@ package com.example.backend.http;
 
 import com.example.backend.i18n.I18nService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.security.Principal;
 
@@ -19,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
-@ExtendWith({SpringExtension.class, MockitoExtension.class})
 @SpringBootTest
 class HttpRequestServiceImplTest {
 
@@ -31,21 +24,6 @@ class HttpRequestServiceImplTest {
 
     @InjectMocks
     private HttpRequestServiceImpl httpRequestServiceImpl;
-
-    private AutoCloseable mocks;
-
-    @BeforeEach
-    public void setUp() {
-        mocks = MockitoAnnotations.openMocks(this);
-        httpRequestServiceImpl = new HttpRequestServiceImpl(httpServletRequest, i18nService);
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        if (mocks != null) {
-            mocks.close();
-        }
-    }
 
     @Test
     void testGetUsername_WithPrincipal() {
