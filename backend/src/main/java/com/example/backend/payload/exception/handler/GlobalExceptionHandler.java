@@ -3,6 +3,7 @@ package com.example.backend.payload.exception.handler;
 import com.example.backend.i18n.I18nService;
 import com.example.backend.payload.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -39,6 +40,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
+    @Setter
     @Value("${spring.application.error-uri}")
     private String errorUri;
 
