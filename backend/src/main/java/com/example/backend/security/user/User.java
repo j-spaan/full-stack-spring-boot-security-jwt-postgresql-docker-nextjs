@@ -2,6 +2,7 @@ package com.example.backend.security.user;
 
 import com.example.backend.config.AppConstants;
 import com.example.backend.security.role.Role;
+import com.example.backend.security.token.Token;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -36,6 +38,10 @@ public class User implements UserDetails {
 
   @Enumerated(EnumType.STRING)
   private Role role;
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "user")
+  private List<Token> tokens;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
