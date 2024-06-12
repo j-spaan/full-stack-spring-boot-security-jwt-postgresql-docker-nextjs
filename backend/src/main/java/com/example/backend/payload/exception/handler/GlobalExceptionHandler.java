@@ -1,6 +1,7 @@
 package com.example.backend.payload.exception.handler;
 
 import com.example.backend.i18n.I18nService;
+import com.example.backend.payload.exception.InvalidCredentialsException;
 import com.example.backend.payload.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -57,6 +58,24 @@ public class GlobalExceptionHandler {
     protected ProblemDetail handleResourceNotFoundException(ResourceNotFoundException ex) {
         return getProblemDetail(
                 HttpStatus.NOT_FOUND,
+                i18nService.getMessage(
+                        ex.getMessage(),
+                        ex.getArgs()
+                )
+        );
+    }
+
+    /**
+     * Handles InvalidCredentialsException and returns a ProblemDetail object
+     * with HTTP status 401 (Unauthorized) and a localized error message.
+     *
+     * @param ex the InvalidCredentialsException thrown when invalid credentials are provided
+     * @return ProblemDetail object containing the error details and HTTP status
+     */
+    @ExceptionHandler(InvalidCredentialsException.class)
+    protected ProblemDetail handleInvalidCredentialsException(InvalidCredentialsException ex) {
+        return getProblemDetail(
+                HttpStatus.UNAUTHORIZED,
                 i18nService.getMessage(
                         ex.getMessage(),
                         ex.getArgs()

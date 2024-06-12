@@ -20,13 +20,13 @@ public class UserController{
     @GetMapping
     @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<User>> getAllUsers(){
-        return ResponseEntity.ok(userService.getAllUsers());
+        return ResponseEntity.ok(userService.findAllUsers());
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<User> getUserById(@PathVariable UUID id) {
-        return userService.getUserById(id);
+        return userService.findUserById(id);
     }
 
     @PatchMapping("/{id}")

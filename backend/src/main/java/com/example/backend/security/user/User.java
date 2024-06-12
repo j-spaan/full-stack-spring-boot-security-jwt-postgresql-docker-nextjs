@@ -32,6 +32,7 @@ public class User implements UserDetails {
   private String firstName;
   private String lastName;
   private String email;
+  private String username;
 
   @JsonIgnore
   private String password;
@@ -53,10 +54,10 @@ public class User implements UserDetails {
     return password;
   }
 
-  @Override
-  public String getUsername() {
-    return email;
-  }
+//  @Override
+//  public String getUsername() {
+//    return email;
+//  }
 
   @Override
   public boolean isAccountNonExpired() {

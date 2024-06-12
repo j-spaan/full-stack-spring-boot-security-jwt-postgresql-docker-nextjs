@@ -4,25 +4,16 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.example.backend.security.role.Permission.ADMIN_CREATE;
-import static com.example.backend.security.role.Permission.ADMIN_DELETE;
-import static com.example.backend.security.role.Permission.ADMIN_READ;
-import static com.example.backend.security.role.Permission.ADMIN_UPDATE;
-import static com.example.backend.security.role.Permission.MANAGER_CREATE;
-import static com.example.backend.security.role.Permission.MANAGER_DELETE;
-import static com.example.backend.security.role.Permission.MANAGER_READ;
-import static com.example.backend.security.role.Permission.MANAGER_UPDATE;
+import static com.example.backend.security.role.Permission.*;
 
 @Getter
 @RequiredArgsConstructor
 public enum Role {
 
-  USER(Collections.emptySet()),
   ADMIN(
           Set.of(
                   ADMIN_READ,
@@ -42,9 +33,15 @@ public enum Role {
                   MANAGER_DELETE,
                   MANAGER_CREATE
           )
-  )
-
-  ;
+  ),
+  USER(
+          Set.of(
+                  USER_READ,
+                  USER_UPDATE,
+                  USER_DELETE,
+                  USER_CREATE
+          )
+  );
 
   private final Set<Permission> permissions;
 
