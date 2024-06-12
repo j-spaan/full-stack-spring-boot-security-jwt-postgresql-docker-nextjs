@@ -1,11 +1,7 @@
 package com.example.backend.i18n;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,40 +19,22 @@ class I18nServiceImplTest {
     @Mock
     private MessageSource messageSource;
 
-    @Mock
-    private HttpServletRequest request;
-
     @Autowired
     private I18nServiceImpl i18nServiceImpl;
 
     @Value("${spring.messages.logging-language}")
     private String loggingLanguage;
 
-    private AutoCloseable mocks;
-
-    @BeforeEach
-    public void setUp() {
-        mocks = MockitoAnnotations.openMocks(this);
-        i18nServiceImpl = new I18nServiceImpl(messageSource, request);
-        i18nServiceImpl.setLoggingLanguage(loggingLanguage);
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        if (mocks != null) {
-            mocks.close();
-        }
-    }
-
     @Test
     void testGetLogMessage() {
         // Arrange
-        String code = "log.message";
-        String expectedMessage = "This is a log message";
+        String code = "i18n.sit.test.log.message";
+        String expectedMessage = "This is a test log message";
         when(messageSource.getMessage(anyString(), any(), any(Locale.class)))
                 .thenReturn(expectedMessage);
 
         // Act
+        i18nServiceImpl.setLoggingLanguage(loggingLanguage);
         String actualMessage = i18nServiceImpl.getLogMessage(code);
 
         // Assert
@@ -66,12 +44,10 @@ class I18nServiceImplTest {
     @Test
     void testGetMessage_WithArgs() {
         // Arrange
-        String code = "user.greeting";
+        String code = "i18n.sit.test.message.args";
         String[] args = {"John"};
-        String expectedMessage = "Hello, John!";
-        when(request.getLocale()).thenReturn(Locale.US);
-        when(messageSource.getMessage(anyString(), any(), any(Locale.class)))
-                .thenReturn(expectedMessage);
+        String expectedMessage = "This is a test message with arguments: " + args[0];
+        when(messageSource.getMessage(code, args, Locale.US)).thenReturn(expectedMessage);
 
         // Act
         String actualMessage = i18nServiceImpl.getMessage(code, args);
@@ -83,11 +59,9 @@ class I18nServiceImplTest {
     @Test
     void testGetMessage_WithoutArgs() {
         // Arrange
-        String code = "welcome.message";
-        String expectedMessage = "Welcome!";
-        when(request.getLocale()).thenReturn(Locale.US);
-        when(messageSource.getMessage(anyString(), any(), any(Locale.class)))
-                .thenReturn(expectedMessage);
+        String code = "i18n.sit.test.message.no.args";
+        String expectedMessage = "This is a test message without arguments";
+        when(messageSource.getMessage(code, null, Locale.US)).thenReturn(expectedMessage);
 
         // Act
         String actualMessage = i18nServiceImpl.getMessage(code);
