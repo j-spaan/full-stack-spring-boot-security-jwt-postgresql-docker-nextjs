@@ -4,6 +4,8 @@ import com.example.backend.security.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 /**
  * This is a service class for managing tokens in the application.
  *
@@ -67,7 +69,7 @@ public class TokenServiceImpl implements TokenService {
      * @param id the id of the user for whom to revoke all tokens
      */
     @Override
-    public void revokeAllTokensByUserId(Long id) {
+    public void revokeAllTokensByUserId(UUID id) {
         tokenRepository.findAllValidTokenByUser(id)
                 .forEach(token -> {
                     token.setExpired(true);

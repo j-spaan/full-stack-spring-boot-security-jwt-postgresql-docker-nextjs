@@ -3,6 +3,7 @@ package com.example.backend.http;
 import com.example.backend.i18n.I18nService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -59,5 +60,13 @@ public record HttpRequestServiceImpl(
             return httpServletRequest.getRemoteAddr();
         }
         return xffHeader.split(",")[0];
+    }
+
+    /** Get the authorization header using the Http Servlet Request.
+     * @return authorization header
+     */
+    @Override
+    public String getAuthorizationHeader() {
+        return httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
     }
 }
