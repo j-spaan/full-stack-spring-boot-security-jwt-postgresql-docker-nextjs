@@ -1,6 +1,7 @@
 package com.example.backend.payload.exception.handler;
 
 import com.example.backend.i18n.I18nService;
+import com.example.backend.payload.exception.InvalidBearerTokenException;
 import com.example.backend.payload.exception.InvalidCredentialsException;
 import com.example.backend.payload.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +54,18 @@ class GlobalExceptionHandlerTest {
         when(i18nService.getMessage(ERROR_MESSAGE, (String) null)).thenReturn(I18N_MESSAGE);
 
         ProblemDetail pd = globalExceptionHandler.handleInvalidCredentialsException(ex);
+
+        assertEquals(HTTP_STATUS_UNAUTHORIZED, pd.getStatus());
+        assertEquals(I18N_MESSAGE, pd.getDetail());
+        assertEquals(ERROR_URI, pd.getType().toString());
+    }
+
+    @Test
+    void testHandleInvalidBearerTokenException() {
+        InvalidBearerTokenException ex = new InvalidBearerTokenException(ERROR_MESSAGE, null);
+        when(i18nService.getMessage(ERROR_MESSAGE, (String) null)).thenReturn(I18N_MESSAGE);
+
+        ProblemDetail pd = globalExceptionHandler.handleInvalidBearerTokenException(ex);
 
         assertEquals(HTTP_STATUS_UNAUTHORIZED, pd.getStatus());
         assertEquals(I18N_MESSAGE, pd.getDetail());
