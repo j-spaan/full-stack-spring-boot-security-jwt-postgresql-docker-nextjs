@@ -3,8 +3,6 @@ package com.example.backend.security.auth;
 import com.example.backend.config.AppConstants;
 import com.example.backend.payload.request.AuthRegistrationRequest;
 import com.example.backend.payload.request.AuthRequest;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

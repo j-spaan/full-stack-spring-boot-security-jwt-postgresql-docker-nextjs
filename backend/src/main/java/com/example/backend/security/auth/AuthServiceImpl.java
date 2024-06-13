@@ -108,7 +108,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public AuthResponse authenticate(AuthRequest request) {
-        String emailOrUsername = request.getEmailOrUsername();
+        final String emailOrUsername = request.getEmailOrUsername();
         User user = userService.findUserByEmailOrUsername(emailOrUsername, emailOrUsername);
         final String email = user.getEmail();
         authenticateByUsernameAndPassword(email, request.getPassword());
@@ -116,7 +116,6 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtService.generateRefreshToken(email);
         tokenService.revokeAllTokensByUserId(user.getId());
         tokenService.saveTokenByUser(jwt, user);
-
         // TODO Use mapper to model and model to mapper
         return AuthResponse.builder()
                 .accessToken(jwt)
@@ -131,21 +130,14 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public AuthResponse refreshToken() {
-        final String authHeader = httpRequestService.getAuthorizationHeader();
-        final String userEmailOrUsername;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return null;
-        }
-        final String refreshToken = authHeader.substring(7);
-        userEmailOrUsername = jwtService.extractSubject(refreshToken);
-        if (userEmailOrUsername == null) {
-            return null;
-        }
+        final String refreshToken = httpRequestService.getBearerToken();
+        final String userEmailOrUsername = jwtService.extractSubject(refreshToken);
         User user = userService.findUserByEmailOrUsername(userEmailOrUsername, userEmailOrUsername);
-        if (!jwtService.isTokenValid(refreshToken, user.getEmail())) {
+        final String email = user.getEmail();
+        if (!jwtService.isTokenValid(refreshToken, email)) {
             return null;
         }
-        var jwt = jwtService.generateToken(user.getEmail());
+        String jwt = jwtService.generateToken(email);
         tokenService.revokeAllTokensByUserId(user.getId());
         tokenService.saveTokenByUser(jwt, user);
         // TODO Use mapper to model and model to mapper
