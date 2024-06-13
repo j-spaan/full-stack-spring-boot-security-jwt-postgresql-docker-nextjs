@@ -2,7 +2,7 @@ package com.example.backend.config;
 
 public final class AppConstants {
 
-    private AppConstants() {
+    AppConstants() {
         throwUnsupportedOperationException();
     }
 
@@ -11,7 +11,7 @@ public final class AppConstants {
         public static final String AUTH = "/auth";
         // add more constants as needed
 
-        private Request() {
+        Request() {
             throwUnsupportedOperationException();
         }
     }
@@ -21,7 +21,7 @@ public final class AppConstants {
         public static final String TOKENS = "tokens";
         // add more constants as needed
 
-        private Table() {
+        Table() {
             throwUnsupportedOperationException();
         }
     }

@@ -2,14 +2,14 @@ package com.example.backend.http;
 
 public final class HttpConstants {
 
-    private HttpConstants() {
+    HttpConstants() {
         throwUnsupportedOperationException();
     }
 
     public static final class Header {
         public static final String X_FORWARDED_FOR = "X-Forwarded-For";
 
-        private Header() {
+        Header() {
             throwUnsupportedOperationException();
         }
     }

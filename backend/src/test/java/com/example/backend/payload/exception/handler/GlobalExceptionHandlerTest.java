@@ -6,14 +6,16 @@ import com.example.backend.payload.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ProblemDetail;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @Slf4j
+@SpringBootTest
 class GlobalExceptionHandlerTest {
 
     private static final String ERROR_URI = "https://example.com/error";
@@ -25,16 +27,12 @@ class GlobalExceptionHandlerTest {
     @Mock
     private I18nService i18nService;
 
+    @InjectMocks
     private GlobalExceptionHandler globalExceptionHandler;
 
     @BeforeEach
     void setUp() {
-        try (AutoCloseable ignored = MockitoAnnotations.openMocks(this)) {
-            globalExceptionHandler = new GlobalExceptionHandler(i18nService);
-            globalExceptionHandler.setErrorUri(ERROR_URI);
-        } catch (Exception ex) {
-            log.error("Exception occurred while setting up the test GlobalExceptionHandlerTest with message: {}", ex.getMessage());
-        }
+        globalExceptionHandler.setErrorUri(ERROR_URI);
     }
 
     @Test
