@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 
 import java.security.Principal;
 
@@ -49,6 +50,20 @@ class HttpRequestServiceImplTest {
         mockXForwardedForHeader(null);
         when(httpServletRequest.getRemoteAddr()).thenReturn("127.100.1.1");
         assertEquals("127.100.1.1", httpRequestServiceImpl.getIp());
+    }
+
+    @Test
+    void testGetAuthorizationHeader_WithAuthorizationHeader() {
+        String bearerToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikpv";
+        when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn
+                (bearerToken);
+        assertEquals(bearerToken, httpRequestServiceImpl.getAuthorizationHeader());
+    }
+
+    @Test
+    void testGetAuthorizationHeader_WithoutAuthorizationHeader() {
+        when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(null);
+        assertNull(httpRequestServiceImpl.getAuthorizationHeader());
     }
 
     private void mockPrincipal(String username) {
