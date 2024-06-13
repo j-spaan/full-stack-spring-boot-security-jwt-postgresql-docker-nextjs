@@ -1,6 +1,7 @@
 package com.example.backend.http;
 
 import com.example.backend.i18n.I18nService;
+import com.example.backend.payload.exception.InvalidBearerTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -10,8 +11,7 @@ import org.springframework.http.HttpHeaders;
 
 import java.security.Principal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -64,6 +64,26 @@ class HttpRequestServiceImplTest {
     void testGetAuthorizationHeader_WithoutAuthorizationHeader() {
         when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(null);
         assertNull(httpRequestServiceImpl.getAuthorizationHeader());
+    }
+
+    @Test
+    void testGetBearerToken_WithBearerToken() {
+        String bearerToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikpv";
+        when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(bearerToken);
+        assertEquals(bearerToken.substring(HttpConstants.Header.BEARER.length()).trim(), httpRequestServiceImpl.getBearerToken());
+    }
+
+    @Test
+    void testGetBearerToken_WithoutBearerToken() {
+        when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(null);
+        assertThrows(InvalidBearerTokenException.class, () -> httpRequestServiceImpl.getBearerToken());
+    }
+
+    @Test
+    void testGetBearerToken_WithInvalidBearerToken() {
+        String invalidBearerToken = "Invalid eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikpv";
+        when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(invalidBearerToken);
+        assertThrows(InvalidBearerTokenException.class, () -> httpRequestServiceImpl.getBearerToken());
     }
 
     private void mockPrincipal(String username) {

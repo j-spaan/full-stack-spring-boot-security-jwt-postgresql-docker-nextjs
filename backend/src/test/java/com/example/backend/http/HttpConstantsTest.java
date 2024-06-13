@@ -23,4 +23,9 @@ class HttpConstantsTest {
     void testXForwardedForConstant() {
         assertEquals("X-Forwarded-For", HttpConstants.Header.X_FORWARDED_FOR);
     }
+
+    @Test
+    void testBearerForConstant() {
+        assertEquals("Bearer ", HttpConstants.Header.BEARER);
+    }
 }
