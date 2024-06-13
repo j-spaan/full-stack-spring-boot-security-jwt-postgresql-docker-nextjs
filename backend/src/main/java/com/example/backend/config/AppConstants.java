@@ -18,6 +18,7 @@ public final class AppConstants {
 
     public static final class Table {
         public static final String USERS = "users";
+        public static final String TOKENS = "tokens";
         // add more constants as needed
 
         private Table() {
