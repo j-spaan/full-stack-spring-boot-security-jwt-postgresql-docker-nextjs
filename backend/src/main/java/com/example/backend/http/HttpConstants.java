@@ -8,6 +8,7 @@ public final class HttpConstants {
 
     public static final class Header {
         public static final String X_FORWARDED_FOR = "X-Forwarded-For";
+        public static final String BEARER = "Bearer ";
 
         Header() {
             throwUnsupportedOperationException();

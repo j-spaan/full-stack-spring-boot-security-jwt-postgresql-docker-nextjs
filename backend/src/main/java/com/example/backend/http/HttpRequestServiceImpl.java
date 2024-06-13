@@ -1,6 +1,7 @@
 package com.example.backend.http;
 
 import com.example.backend.i18n.I18nService;
+import com.example.backend.payload.exception.InvalidBearerTokenException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -68,5 +69,17 @@ public record HttpRequestServiceImpl(
     @Override
     public String getAuthorizationHeader() {
         return httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+    }
+
+    /** Get the bearer token from the authorization header using the Http Servlet Request.
+     * @return bearer token
+     */
+    @Override
+    public String getBearerToken() {
+        String authorizationHeader = this.getAuthorizationHeader();
+        if (authorizationHeader == null || !authorizationHeader.startsWith(HttpConstants.Header.BEARER)) {
+            throw new InvalidBearerTokenException(i18nService.getMessage("auth.si.invalid.bearer"), null);
+        }
+        return authorizationHeader.substring(HttpConstants.Header.BEARER.length()).trim();
     }
 }

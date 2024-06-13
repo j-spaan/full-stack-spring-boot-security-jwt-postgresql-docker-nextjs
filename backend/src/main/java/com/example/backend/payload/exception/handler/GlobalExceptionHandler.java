@@ -1,6 +1,7 @@
 package com.example.backend.payload.exception.handler;
 
 import com.example.backend.i18n.I18nService;
+import com.example.backend.payload.exception.InvalidBearerTokenException;
 import com.example.backend.payload.exception.InvalidCredentialsException;
 import com.example.backend.payload.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +75,24 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(InvalidCredentialsException.class)
     protected ProblemDetail handleInvalidCredentialsException(InvalidCredentialsException ex) {
+        return getProblemDetail(
+                HttpStatus.UNAUTHORIZED,
+                i18nService.getMessage(
+                        ex.getMessage(),
+                        ex.getArgs()
+                )
+        );
+    }
+
+    /**
+     * Handles InvalidBearerTokenException and returns a ProblemDetail object
+     * with HTTP status 401 (Unauthorized) and a localized error message.
+     *
+     * @param ex the InvalidBearerTokenException thrown when an invalid bearer token is provided
+     * @return ProblemDetail object containing the error details and HTTP status
+     */
+    @ExceptionHandler(InvalidBearerTokenException.class)
+    protected ProblemDetail handleInvalidBearerTokenException(InvalidBearerTokenException ex) {
         return getProblemDetail(
                 HttpStatus.UNAUTHORIZED,
                 i18nService.getMessage(
