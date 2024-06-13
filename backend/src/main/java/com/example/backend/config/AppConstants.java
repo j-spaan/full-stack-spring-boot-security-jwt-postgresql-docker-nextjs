@@ -9,6 +9,7 @@ public final class AppConstants {
     public static final class Request {
         public static final String USERS = "/users";
         public static final String AUTH = "/auth";
+        public static final String MANAGEMENT = "/management/**";
         // add more constants as needed
 
         Request() {
