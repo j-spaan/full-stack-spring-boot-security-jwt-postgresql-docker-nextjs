@@ -70,20 +70,20 @@ class HttpRequestServiceImplTest {
     void testGetBearerToken_WithBearerToken() {
         String bearerToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikpv";
         when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(bearerToken);
-        assertEquals(bearerToken.substring(HttpConstants.Header.BEARER.length()).trim(), httpRequestServiceImpl.getBearerToken());
+        assertEquals(bearerToken.substring(HttpConstants.Header.BEARER.length()).trim(), httpRequestServiceImpl.extractBearerToken());
     }
 
     @Test
     void testGetBearerToken_WithoutBearerToken() {
         when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(null);
-        assertThrows(InvalidBearerTokenException.class, () -> httpRequestServiceImpl.getBearerToken());
+        assertThrows(InvalidBearerTokenException.class, () -> httpRequestServiceImpl.extractBearerToken());
     }
 
     @Test
     void testGetBearerToken_WithInvalidBearerToken() {
         String invalidBearerToken = "Invalid eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikpv";
         when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(invalidBearerToken);
-        assertThrows(InvalidBearerTokenException.class, () -> httpRequestServiceImpl.getBearerToken());
+        assertThrows(InvalidBearerTokenException.class, () -> httpRequestServiceImpl.extractBearerToken());
     }
 
     private void mockPrincipal(String username) {
