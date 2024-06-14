@@ -3,6 +3,7 @@ package com.example.backend.security.auth;
 import com.example.backend.payload.request.AuthRegistrationRequest;
 import com.example.backend.payload.request.AuthRequest;
 import com.example.backend.payload.response.AuthResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.security.core.Authentication;
  */
 public interface AuthService {
     boolean isAuthenticationValid(Authentication authentication);
+    void setAuthentication(String userEmail, HttpServletRequest request);
     AuthResponse register(AuthRegistrationRequest authRegistrationRequest);
     AuthResponse authenticate(AuthRequest authRequest);
     AuthResponse refreshToken();
