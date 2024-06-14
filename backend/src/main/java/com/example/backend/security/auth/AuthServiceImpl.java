@@ -11,12 +11,17 @@ import com.example.backend.security.role.Role;
 import com.example.backend.security.token.TokenService;
 import com.example.backend.security.user.User;
 import com.example.backend.security.user.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,6 +35,7 @@ import org.springframework.stereotype.Service;
  *   <li>{@link JwtService}: This class is responsible for operations related to JSON Web Tokens (JWTs). This includes generating, validating, and parsing JWTs.</li>
  *   <li>{@link PasswordService}: This class provides operations related to handling passwords, such as encoding a plain text password.</li>
  *   <li>{@link TokenService}: This class provides operations related to handling tokens, such as validating tokens, saving tokens for a user, and revoking tokens.</li>
+ *   <li>{@link UserDetailsService}: This interface is used to retrieve user-related data. It is used by the {@link AuthenticationManager} to authenticate a user.</li>
  *   <li>{@link UserService}: This class provides operations related to user management. Including finding users, creating users, updating user information, and deleting users.</li>
  * </ul>
  *
@@ -56,6 +62,8 @@ public class AuthServiceImpl implements AuthService {
 
     private final TokenService tokenService;
 
+    private final UserDetailsService userDetailsService;
+
     private final UserService userService;
 
     /**
@@ -71,6 +79,24 @@ public class AuthServiceImpl implements AuthService {
             return authentication.isAuthenticated();
         }
         return false;
+    }
+
+    /**
+     * Sets the authentication for the given user email.
+     *
+     * @param userEmail the email of the user to authenticate
+     * @param request the HTTP request
+     */
+    @Override
+    public void setAuthentication(String userEmail, HttpServletRequest request) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                userDetails,
+                null,
+                userDetails.getAuthorities()
+        );
+        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 
     /**
