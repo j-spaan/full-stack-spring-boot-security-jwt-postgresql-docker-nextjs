@@ -45,7 +45,7 @@ public class CustomLogoutHandler implements LogoutHandler {
     request.getSession().invalidate();
     authentication.setAuthenticated(false);
 
-    final String jwt = httpRequestService.getBearerToken();
+    final String jwt = httpRequestService.extractBearerToken();
     final String userEmail = jwtService.extractSubject(jwt);
 
     if (userEmail != null && jwtService.isTokenValid(jwt, userEmail) && Boolean.TRUE.equals(tokenService.isTokenValid(jwt))) {

@@ -75,7 +75,7 @@ public record HttpRequestServiceImpl(
      * @return bearer token
      */
     @Override
-    public String getBearerToken() {
+    public String extractBearerToken() {
         String authorizationHeader = this.getAuthorizationHeader();
         if (authorizationHeader == null || !authorizationHeader.startsWith(HttpConstants.Header.BEARER)) {
             throw new InvalidBearerTokenException(i18nService.getMessage("auth.si.invalid.bearer"), null);

@@ -31,7 +31,8 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private static final String[] WHITE_LIST_URL = {"/auth/**",
+    private static final String[] WHITE_LIST_URL = {
+            "/auth/**",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",
@@ -48,7 +49,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize) -> authorize
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
                                 .requestMatchers(AppConstants.Request.MANAGEMENT).hasAnyRole(ADMIN.name(), MANAGER.name())
