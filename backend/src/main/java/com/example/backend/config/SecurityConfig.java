@@ -29,6 +29,8 @@ public class SecurityConfig {
 
     private final CustomLogoutHandler customLogoutHandler;
 
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private static final String[] WHITE_LIST_URL = {
@@ -67,7 +69,7 @@ public class SecurityConfig {
                         logout.logoutUrl("/auth/logout")
                                 .addLogoutHandler(customLogoutHandler)
                                 .logoutSuccessHandler((request, response, authentication) -> {
-                                    new CustomLogoutSuccessHandler().onLogoutSuccess(request, response, authentication);
+                                    customLogoutSuccessHandler.onLogoutSuccess(request, response, authentication);
                                     SecurityContextHolder.clearContext();
                                 })
                 );
