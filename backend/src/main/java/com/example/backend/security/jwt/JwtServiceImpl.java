@@ -98,18 +98,16 @@ public class JwtServiceImpl implements JwtService {
     try {
       return claimsResolver.apply(extractAllClaims(jwt));
     } catch (SignatureException e) {
-      // TODO register IP when invalid JWT is provided
       this.logErrorMessage("log.jwt.si.invalid.jwt", e.getMessage());
     } catch (MalformedJwtException e) {
-      // TODO register IP when malformed JWT is provided
       this.logErrorMessage("log.jwt.si.malformed.jwt", e.getMessage());
     } catch (ExpiredJwtException e) {
       this.logErrorMessage("log.jwt.si.expired.jwt", e.getMessage());
     } catch (UnsupportedJwtException e) {
-      // TODO register IP when unsupported JWT is provided
       this.logErrorMessage("log.jwt.si.unsupported.jwt", e.getMessage());
     }
-    return null;
+    // TODO register IP when unsupported JWT is provided
+    throw new SignatureException("Invalid JWT token");
   }
 
   /**
