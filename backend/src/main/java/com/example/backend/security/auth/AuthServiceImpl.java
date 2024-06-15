@@ -1,6 +1,7 @@
 package com.example.backend.security.auth;
 
 import com.example.backend.http.HttpRequestService;
+import com.example.backend.i18n.I18nService;
 import com.example.backend.payload.exception.InvalidCredentialsException;
 import com.example.backend.payload.request.AuthRegistrationRequest;
 import com.example.backend.payload.request.AuthRequest;
@@ -18,7 +19,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
  * <ul>
  *   <li>{@link AuthenticationManager}: Spring Security's component that is responsible for validating the provided credentials during the authentication process.</li>
  *   <li>{@link HttpRequestService}: This class provides operations related to handling HTTP requests, such as retrieving the authorization header from the request.</li>
+ *   <li>{@link I18nService}: This class provides operations related to internationalization and localization, such as retrieving localized messages.</li>
  *   <li>{@link JwtService}: This class is responsible for operations related to JSON Web Tokens (JWTs). This includes generating, validating, and parsing JWTs.</li>
  *   <li>{@link PasswordService}: This class provides operations related to handling passwords, such as encoding a plain text password.</li>
  *   <li>{@link TokenService}: This class provides operations related to handling tokens, such as validating tokens, saving tokens for a user, and revoking tokens.</li>
@@ -52,13 +53,13 @@ public class AuthServiceImpl implements AuthService {
 
     private final HttpRequestService httpRequestService;
 
+    private final I18nService i18nService;
+
     private final JwtService jwtService;
 
     private final PasswordService passwordService;
 
     private final TokenService tokenService;
-
-    private final UserDetailsService userDetailsService;
 
     private final UserService userService;
 
@@ -98,10 +99,13 @@ public class AuthServiceImpl implements AuthService {
         String jwt = jwtService.generateToken(user.getEmail());
         String refreshToken = jwtService.generateRefreshToken(user.getEmail());
         tokenService.saveTokenByUser(jwt, savedUser);
-        return AuthResponse.builder()
-                .accessToken(jwt)
-                .refreshToken(refreshToken)
-                .build();
+
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setDetail(i18nService.getMessage("auth.si.register.success", user.getFirstName()));
+        authResponse.setInstance(null);
+        authResponse.setAccessToken(jwt);
+        authResponse.setRefreshToken(refreshToken);
+        return authResponse;
     }
 
     /**
@@ -121,11 +125,14 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtService.generateRefreshToken(email);
         tokenService.revokeAllTokensByUserId(user.getId());
         tokenService.saveTokenByUser(jwt, user);
+
         // TODO Use mapper to model and model to mapper
-        return AuthResponse.builder()
-                .accessToken(jwt)
-                .refreshToken(refreshToken)
-                .build();
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setDetail(i18nService.getMessage("auth.si.authenticate.success", user.getFirstName()));
+        authResponse.setInstance(httpRequestService.getUri());
+        authResponse.setAccessToken(jwt);
+        authResponse.setRefreshToken(refreshToken);
+        return authResponse;
     }
 
     /**
@@ -136,9 +143,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponse refreshToken() {
         final String refreshToken = httpRequestService.extractBearerToken();
-        final String userEmailOrUsername = jwtService.extractSubject(refreshToken);
-        User user = userService.findUserByEmailOrUsername(userEmailOrUsername, userEmailOrUsername);
-        final String email = user.getEmail();
+        final String email = jwtService.extractSubject(refreshToken);
+        User user = userService.findUserByEmail(email);
         if (!jwtService.isTokenValid(refreshToken, email)) {
             return null;
         }
@@ -146,10 +152,13 @@ public class AuthServiceImpl implements AuthService {
         tokenService.revokeAllTokensByUserId(user.getId());
         tokenService.saveTokenByUser(jwt, user);
         // TODO Use mapper to model and model to mapper
-        return AuthResponse.builder()
-                .accessToken(jwt)
-                .refreshToken(refreshToken)
-                .build();
+
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setDetail(i18nService.getMessage("auth.si.refresh-token.success"));
+        authResponse.setInstance(httpRequestService.getUri());
+        authResponse.setAccessToken(jwt);
+        authResponse.setRefreshToken(refreshToken);
+        return authResponse;
     }
 
     /**

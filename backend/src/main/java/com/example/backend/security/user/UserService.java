@@ -8,6 +8,7 @@ import java.util.UUID;
 public interface UserService {
     List<User> findAllUsers();
     ResponseEntity<User> findUserById(UUID id);
+    User findUserByEmail(String email);
     User findUserByEmailOrUsername(String email, String username);
     User saveUser(User user);
     void changeUserInfo(User user);
