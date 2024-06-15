@@ -9,10 +9,12 @@ import com.example.backend.payload.response.AuthResponse;
 import com.example.backend.security.jwt.JwtService;
 import com.example.backend.security.password.PasswordService;
 import com.example.backend.security.role.Role;
+import com.example.backend.security.role.RoleService;
 import com.example.backend.security.token.TokenService;
 import com.example.backend.security.user.User;
 import com.example.backend.security.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +22,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 /**
  * Implementation of the AuthService interface.
@@ -59,9 +63,14 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordService passwordService;
 
+    private final RoleService roleService;
+
     private final TokenService tokenService;
 
     private final UserService userService;
+
+    @Value("${application.security.default-role}")
+    private String defaultRole;
 
     /**
      * Validates the given authentication object.
@@ -93,7 +102,8 @@ public class AuthServiceImpl implements AuthService {
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .password(passwordService.encodePassword(request.getPassword()))
-                .role(Role.USER)
+                .roles(Collections.singleton(
+                        roleService.findRoleByName(defaultRole)))
                 .build();
         User savedUser = userService.saveUser(user);
         String jwt = jwtService.generateToken(user.getEmail());

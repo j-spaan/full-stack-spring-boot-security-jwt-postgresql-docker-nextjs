@@ -7,10 +7,11 @@ public final class AppConstants {
     }
 
     public static final class Request {
-        public static final String USERS = "/users";
         public static final String AUTH = "/auth";
         public static final String MANAGEMENT = "/management/**";
-        // add more constants as needed
+        public static final String ROLES = "/roles";
+        public static final String USERS = "/users";
+        // add more constants as needed (in alphabetical order)
 
         Request() {
             throwUnsupportedOperationException();
@@ -18,9 +19,10 @@ public final class AppConstants {
     }
 
     public static final class Table {
-        public static final String USERS = "users";
+        public static final String ROLES = "roles";
         public static final String TOKENS = "tokens";
-        // add more constants as needed
+        public static final String USERS = "users";
+        // add more constants as needed (in alphabetical order)
 
         Table() {
             throwUnsupportedOperationException();
