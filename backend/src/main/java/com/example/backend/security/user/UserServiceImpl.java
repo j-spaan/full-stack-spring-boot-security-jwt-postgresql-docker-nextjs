@@ -25,6 +25,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "user.si.email.not.found",
+                        new String[]{email})
+                );
+    }
+
+    @Override
     public User findUserByEmailOrUsername(String email, String username) {
         return userRepository.findByEmailOrUsername(email, username)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -62,7 +71,7 @@ public class UserServiceImpl implements UserService {
                 );
     }
 
-    private boolean existsUserByEmail(String email) {
+    public boolean existsUserByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 }

@@ -9,5 +9,6 @@ public interface HttpRequestService {
     String getUsername();
     String getIp();
     String getAuthorizationHeader();
+    String getUri();
     String extractBearerToken();
 }

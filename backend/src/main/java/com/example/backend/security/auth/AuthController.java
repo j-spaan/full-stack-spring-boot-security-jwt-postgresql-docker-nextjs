@@ -3,6 +3,7 @@ package com.example.backend.security.auth;
 import com.example.backend.config.AppConstants;
 import com.example.backend.payload.request.AuthRegistrationRequest;
 import com.example.backend.payload.request.AuthRequest;
+import com.example.backend.payload.response.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +20,17 @@ public class AuthController {
   private final AuthService authService;
 
   @PostMapping("/register")
-  public ResponseEntity<Object> register(@RequestBody AuthRegistrationRequest authRegistrationRequest) {
+  public ResponseEntity<AuthResponse> register(@RequestBody AuthRegistrationRequest authRegistrationRequest) {
     return new ResponseEntity<>(authService.register(authRegistrationRequest), HttpStatus.OK);
   }
 
   @PostMapping("/authenticate")
-  public ResponseEntity<Object> authenticate(@RequestBody AuthRequest authRequest) {
+  public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthRequest authRequest) {
     return new ResponseEntity<>(authService.authenticate(authRequest), HttpStatus.OK);
   }
 
   @PostMapping("/refresh-token")
-  public ResponseEntity<Object> refreshToken() {
+  public ResponseEntity<AuthResponse> refreshToken() {
     return new ResponseEntity<>(authService.refreshToken(), HttpStatus.OK);
   }
 }

@@ -36,13 +36,9 @@ public record CustomLogoutSuccessHandler(I18nService i18nService, Gson gson) imp
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        OkResponse okResponse = OkResponse.builder()
-                .type("/ok")
-                .title(HttpStatus.OK.getReasonPhrase())
-                .status(HttpStatus.OK.value())
-                .detail(i18nService.getMessage("logout.success"))
-                .instance(request.getRequestURI())
-                .build();
+        OkResponse okResponse = new OkResponse();
+        okResponse.setDetail(i18nService.getMessage("logout.success"));
+        okResponse.setInstance(request.getRequestURI());
 
         String serializedResponse = gson.toJson(okResponse);
 

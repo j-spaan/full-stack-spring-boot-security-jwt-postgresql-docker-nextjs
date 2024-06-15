@@ -71,6 +71,14 @@ public record HttpRequestServiceImpl(
         return httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
     }
 
+    /** Get the request URI using the Http Servlet Request.
+     * @return request URI
+     */
+    @Override
+    public String getUri() {
+        return httpServletRequest.getRequestURI();
+    }
+
     /** Get the bearer token from the authorization header using the Http Servlet Request.
      * @return bearer token
      */

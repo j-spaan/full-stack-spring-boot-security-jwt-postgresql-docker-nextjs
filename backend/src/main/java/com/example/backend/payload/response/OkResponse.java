@@ -1,19 +1,18 @@
 package com.example.backend.payload.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class OkResponse {
 
-    private String type;
-    private String title;
-    private int status;
+    private String type = "/ok";
+    private String title = HttpStatus.OK.getReasonPhrase();
+    private int status = HttpStatus.OK.value();
     private String detail;
     private String instance;
 }

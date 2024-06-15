@@ -1,0 +1,3 @@
+-- FOR TESTING PURPOSES ONLY
+INSERT INTO users(id, first_name, last_name, email, username, password, role) VALUES ('21b14b90-861f-4883-b457-ddf8d5f48340', 'adminFirst', 'adminLast', 'admin@mail.com', 'admin', '$argon2id$v=19$m=16384,t=2,p=1$rAV5qOZ88GDboAhP0AYo1w$JeOR/LWYSFA1D+X0vUpcM76MwoTbwfHRDT4Dc5XyLkk', 'ADMIN');
+INSERT INTO users(id, first_name, last_name, email, username, password, role) VALUES ('21b14b90-861f-4883-b457-ddf8d5f48341', 'managerFirst', 'managerLast', 'manager@mail.com', 'manager', '$argon2id$v=19$m=16384,t=2,p=1$rAV5qOZ88GDboAhP0AYo1w$JeOR/LWYSFA1D+X0vUpcM76MwoTbwfHRDT4Dc5XyLkk', 'MANAGER');

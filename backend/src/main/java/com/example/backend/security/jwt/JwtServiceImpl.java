@@ -200,7 +200,7 @@ public class JwtServiceImpl implements JwtService {
     Date expirationDate = extractExpiration(token);
 
     if (expirationDate != null) {
-      return expirationDate.after(new Date());
+      return expirationDate.before(new Date());
     }
     return false;
   }
