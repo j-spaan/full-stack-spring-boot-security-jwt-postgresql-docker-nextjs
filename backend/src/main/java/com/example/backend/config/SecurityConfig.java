@@ -14,8 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.example.backend.security.role.Permission.*;
-import static com.example.backend.security.role.Role.ADMIN;
-import static com.example.backend.security.role.Role.MANAGER;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -32,6 +30,9 @@ public class SecurityConfig {
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private static final String ADMIN = "ADMIN";
+    private static final String MANAGER = "MANAGER";
 
     private static final String[] WHITE_LIST_URL = {
             "/auth/**",
@@ -54,11 +55,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .requestMatchers(AppConstants.Request.MANAGEMENT).hasAnyRole(ADMIN.name(), MANAGER.name())
-                                .requestMatchers(GET, AppConstants.Request.MANAGEMENT).hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-                                .requestMatchers(POST, AppConstants.Request.MANAGEMENT).hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
-                                .requestMatchers(PUT, AppConstants.Request.MANAGEMENT).hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-                                .requestMatchers(DELETE, AppConstants.Request.MANAGEMENT).hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+                                .requestMatchers(AppConstants.Request.MANAGEMENT).hasAnyRole(ADMIN, MANAGER)
                                 .anyRequest()
                                 .authenticated()
                 )
