@@ -1,13 +1,9 @@
 package com.example.backend;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@Slf4j
 @SpringBootApplication
-@EnableJpaAuditing(auditorAwareRef = "auditorAwareProvider")
 public class BackendApplication {
 
 	public static void main(String[] args) {

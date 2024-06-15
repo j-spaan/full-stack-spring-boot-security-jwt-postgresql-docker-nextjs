@@ -1,12 +1,10 @@
 package com.example.backend.config;
 
-import com.example.backend.audit.AuditorAwareImpl;
 import com.example.backend.security.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -22,11 +20,6 @@ import java.util.UUID;
 public class AppConfig {
 
     private final UserService userService;
-
-    @Bean
-    public AuditorAware<UUID> auditorAwareProvider() {
-        return new AuditorAwareImpl();
-    }
 
     @Bean
     ModelMapper modelMapper() {
