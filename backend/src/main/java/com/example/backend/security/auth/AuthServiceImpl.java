@@ -17,6 +17,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
@@ -161,9 +162,10 @@ public class AuthServiceImpl implements AuthService {
      */
     private void authenticateByUsernameAndPassword(String email, String password) {
         try {
-            authenticationManager.authenticate(
+            Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
             );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (AuthenticationException ex) {
             throw new InvalidCredentialsException("auth.si.invalid.credentials", new String[]{email});
         }
