@@ -15,8 +15,9 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<List<User>> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        return ResponseEntity.ok(users);
     }
 
     @Override
@@ -59,8 +60,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserById(UUID id) {
+    public ResponseEntity<Void> deleteUserById(UUID id) {
         userRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     private User findById(UUID id) {

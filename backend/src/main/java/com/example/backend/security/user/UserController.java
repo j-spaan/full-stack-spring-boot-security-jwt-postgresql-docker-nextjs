@@ -20,7 +20,7 @@ public class UserController{
     @GetMapping
     @PreAuthorize("hasAuthority('admin:read')")
     public ResponseEntity<List<User>> getAllUsers(){
-        return ResponseEntity.ok(userService.findAllUsers());
+        return userService.findAllUsers();
     }
 
     @GetMapping("/{id}")
@@ -37,7 +37,7 @@ public class UserController{
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('admin:read')")
-    public void deleteUserById(@PathVariable UUID id) {
-        userService.deleteUserById(id);
+    public ResponseEntity<Void> deleteUserById(@PathVariable UUID id) {
+        return userService.deleteUserById(id);
     }
 }
