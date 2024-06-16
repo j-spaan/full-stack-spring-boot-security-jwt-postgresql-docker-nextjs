@@ -2,6 +2,7 @@ package com.example.backend.security.role;
 
 import com.example.backend.config.AppConstants;
 import com.example.backend.payload.request.RoleDto;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,22 +17,22 @@ public record RoleController(RoleService roleService) {
     }
 
     @GetMapping("/{id}")
-    public Role getRoleById(int id) {
+    public ResponseEntity<Role> getRoleById(int id) {
         return roleService.findRoleById(id);
     }
 
     @PostMapping
-    public Role createRole(RoleDto roleDto) {
+    public ResponseEntity<Role> createRole(RoleDto roleDto) {
         return roleService.saveRole(roleDto);
     }
 
     @PutMapping("/{id}")
-    public Role updateRole(int id, RoleDto roleDto) {
-        return roleService.updateRole(id, roleDto);
+    public ResponseEntity<Role> updateRoleById(int id, RoleDto roleDto) {
+        return roleService.updateRoleById(id, roleDto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRole(int id) {
-        roleService.deleteRole(id);
+    public ResponseEntity<Void> deleteRoleById(int id) {
+        return roleService.deleteRoleById(id);
     }
 }

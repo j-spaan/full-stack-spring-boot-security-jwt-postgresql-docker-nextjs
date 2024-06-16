@@ -1,12 +1,18 @@
 package com.example.backend.security.role;
 
+import com.example.backend.http.HttpRequestService;
+import com.example.backend.payload.exception.ResourceNotFoundException;
 import com.example.backend.payload.request.RoleDto;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.util.List;
 
 @Service
-public record RoleServiceImpl(RoleRepository roleRepository) implements RoleService {
+public record RoleServiceImpl(
+        HttpRequestService httpRequestService,
+        RoleRepository roleRepository) implements RoleService {
 
     @Override
     public List<Role> findAllRoles() {
@@ -14,34 +20,49 @@ public record RoleServiceImpl(RoleRepository roleRepository) implements RoleServ
     }
 
     @Override
-    public Role findRoleById(int id) {
-        return roleRepository.findById(id).orElse(null);
+    public ResponseEntity<Role> findRoleById(int id) {
+        return ResponseEntity.ok().body(this.findById(id));
     }
 
     @Override
     public Role findRoleByName(String name) {
-        return roleRepository.findByName(name).orElse(null);
+        return roleRepository.findByName(name)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "role.si.name.not.found",
+                        new String[]{name})
+                );
     }
 
     @Override
-    public Role saveRole(RoleDto roleDto) {
+    public ResponseEntity<Role> saveRole(RoleDto roleDto) {
         Role saveRole = new Role();
         saveRole.setName(roleDto.getName());
-        return roleRepository.save(saveRole);
+        return ResponseEntity.created(
+                URI.create(httpRequestService.getUri()))
+                .body(roleRepository.save(saveRole));
     }
 
     @Override
-    public Role updateRole(int id, RoleDto roleDto) {
-        Role updateRole = roleRepository.findById(id).orElse(null);
+    public ResponseEntity<Role> updateRoleById(int id, RoleDto roleDto) {
+        Role updateRole = this.findById(id);
         if (updateRole != null) {
             updateRole.setName(roleDto.getName());
-            return roleRepository.save(updateRole);
+            return ResponseEntity.ok().body(roleRepository.save(updateRole));
         }
         return null;
     }
 
     @Override
-    public void deleteRole(int id) {
+    public ResponseEntity<Void> deleteRoleById(int id) {
         roleRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    private Role findById(int id) {
+        return roleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "role.si.id.not.found",
+                        new String[]{String.valueOf(id)})
+                );
     }
 }
