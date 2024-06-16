@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    List<User> findAllUsers();
+    ResponseEntity<List<User>> findAllUsers();
     ResponseEntity<User> findUserById(UUID id);
     User findUserByEmail(String email);
     User findUserByEmailOrUsername(String email, String username);
     User saveUser(User user);
     void changeUserInfo(User user);
-    void deleteUserById(UUID id);
+    ResponseEntity<Void> deleteUserById(UUID id);
 }
