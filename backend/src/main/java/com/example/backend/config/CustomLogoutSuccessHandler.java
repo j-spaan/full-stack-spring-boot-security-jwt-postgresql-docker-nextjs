@@ -1,11 +1,12 @@
 package com.example.backend.config;
 
+import com.example.backend.http.HttpConstants;
 import com.example.backend.i18n.I18nService;
 import com.example.backend.payload.response.OkResponse;
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -33,16 +34,18 @@ public record CustomLogoutSuccessHandler(I18nService i18nService, Gson gson) imp
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication) throws IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setCharacterEncoding(HttpConstants.Body.UTF_8);
 
+        // Create response body
         OkResponse okResponse = new OkResponse();
         okResponse.setDetail(i18nService.getMessage("logout.success"));
         okResponse.setInstance(request.getRequestURI());
 
         String serializedResponse = gson.toJson(okResponse);
 
-        response.setStatus(HttpStatus.OK.value());
+        // Write response body into the response using the writer
         response.getWriter().write(serializedResponse);
     }
 }

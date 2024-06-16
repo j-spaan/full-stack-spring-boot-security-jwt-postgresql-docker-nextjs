@@ -1,5 +1,6 @@
 package com.example.backend.security.jwt;
 
+import com.example.backend.http.HttpConstants;
 import com.example.backend.security.token.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -54,21 +55,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       @NonNull HttpServletResponse response,
       @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
-    final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+    final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+    if (authHeader == null || !authHeader.startsWith(HttpConstants.Header.BEARER)) {
       filterChain.doFilter(request, response);
       return;
     }
-    final String jwt = authorizationHeader.substring(7);
+    final String jwt = authHeader.substring(HttpConstants.Header.BEARER.length()).trim();
     final String userEmail = jwtService.extractSubject(jwt);
-    if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null && isTokenValid(jwt, userEmail)) {
+    if (userEmail != null
+            && SecurityContextHolder.getContext().getAuthentication() == null
+            && jwtService.isTokenValid(jwt, userEmail)
+            && Boolean.TRUE.equals(tokenService.isTokenValid(jwt))) {
       setAuthentication(userEmail, request);
     }
     filterChain.doFilter(request, response);
-  }
-
-  private boolean isTokenValid(String jwt, String userEmail) {
-    return jwtService.isTokenValid(jwt, userEmail) && Boolean.TRUE.equals(tokenService.isTokenValid(jwt));
   }
 
   private void setAuthentication(String userEmail, HttpServletRequest request) {

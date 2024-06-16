@@ -15,6 +15,14 @@ public final class HttpConstants {
         }
     }
 
+    public static final class Body {
+        public static final String UTF_8 = "UTF-8";
+
+        Body() {
+            throwUnsupportedOperationException();
+        }
+    }
+
     private static void throwUnsupportedOperationException() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
