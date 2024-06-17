@@ -1,8 +1,7 @@
-package com.example.backend.config;
+package com.example.backend.config.bean;
 
 import com.example.backend.security.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,18 +12,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.UUID;
-
 @Configuration
 @RequiredArgsConstructor
-public class AppConfig {
+public class SecurityBeanConfig {
 
     private final UserService userService;
-
-    @Bean
-    ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {

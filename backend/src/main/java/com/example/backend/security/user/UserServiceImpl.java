@@ -2,17 +2,20 @@ package com.example.backend.security.user;
 
 import com.example.backend.payload.exception.ResourceNotFoundException;
 import com.example.backend.payload.request.UserDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
-public record UserServiceImpl(
-        UserRepository userRepository,
-        UserMapperService userMapperService) implements UserService {
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
+
+    private final UserMapperService userMapperService;
+
+    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity<List<UserDto>> findAllUsers() {
@@ -20,7 +23,7 @@ public record UserServiceImpl(
 
         List<UserDto> userDtoList = users.stream()
                 .map(userMapperService::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(userDtoList);
     }
@@ -52,12 +55,6 @@ public record UserServiceImpl(
 
     @Override
     public User saveUser(User user) {
-        if (this.existsUserByEmail(user.getEmail())) {
-            throw new ResourceNotFoundException(
-                    "user.si.email.exists",
-                    new String[]{user.getEmail()}
-            );
-        }
         return userRepository.save(user);
     }
 
@@ -78,9 +75,5 @@ public record UserServiceImpl(
                         "user.si.id.not.found",
                         new String[]{id.toString()})
                 );
-    }
-
-    public boolean existsUserByEmail(String email) {
-        return userRepository.existsByEmail(email);
     }
 }

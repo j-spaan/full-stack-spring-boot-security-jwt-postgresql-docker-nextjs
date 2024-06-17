@@ -8,20 +8,30 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public record RoleServiceImpl(
         HttpRequestService httpRequestService,
+        RoleMapperService roleMapperService,
         RoleRepository roleRepository) implements RoleService {
 
     @Override
-    public List<Role> findAllRoles() {
-        return roleRepository.findAll();
+    public ResponseEntity<List<RoleDto>> findAllRoles() {
+        List<Role> roles = roleRepository.findAll();
+
+        List<RoleDto> roleDtoList = roles.stream()
+                .map(roleMapperService::convertToDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(roleDtoList);
     }
 
     @Override
-    public ResponseEntity<Role> findRoleById(int id) {
-        return ResponseEntity.ok().body(this.findById(id));
+    public ResponseEntity<RoleDto> findRoleById(int id) {
+        return ResponseEntity.ok().body(
+                roleMapperService.convertToDto(this.findById(id))
+        );
     }
 
     @Override
@@ -34,22 +44,21 @@ public record RoleServiceImpl(
     }
 
     @Override
-    public ResponseEntity<Role> saveRole(RoleDto roleDto) {
-        Role saveRole = new Role();
-        saveRole.setName(roleDto.getName());
+    public ResponseEntity<RoleDto> saveRole(RoleDto roleDto) {
+        Role newRole = roleMapperService.convertToEntity(roleDto);
         return ResponseEntity.created(
                 URI.create(httpRequestService.getUri()))
-                .body(roleRepository.save(saveRole));
+                .body(roleMapperService.convertToDto(roleRepository.save(newRole)));
     }
 
     @Override
-    public ResponseEntity<Role> updateRoleById(int id, RoleDto roleDto) {
-        Role updateRole = this.findById(id);
-        if (updateRole != null) {
-            updateRole.setName(roleDto.getName());
-            return ResponseEntity.ok().body(roleRepository.save(updateRole));
-        }
-        return null;
+    public ResponseEntity<RoleDto> updateRoleById(int id, RoleDto roleDto) {
+        Role updateRole = this.findRoleByName(roleDto.getName());
+        updateRole.setName(roleDto.getName());
+        return ResponseEntity.ok().body(
+                roleMapperService.convertToDto(
+                        roleRepository.save(updateRole)
+                ));
     }
 
     @Override

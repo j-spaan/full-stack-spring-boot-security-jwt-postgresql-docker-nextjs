@@ -1,5 +1,8 @@
 package com.example.backend.config;
 
+import com.example.backend.config.handler.CustomLogoutHandler;
+import com.example.backend.config.handler.CustomLogoutSuccessHandler;
+import com.example.backend.config.handler.UnauthorizedHandler;
 import com.example.backend.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

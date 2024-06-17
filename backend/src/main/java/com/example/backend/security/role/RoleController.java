@@ -12,22 +12,22 @@ import java.util.List;
 public record RoleController(RoleService roleService) {
 
     @GetMapping
-    public List<Role> getAllRoles() {
+    public ResponseEntity<List<RoleDto>> getAllRoles() {
         return roleService.findAllRoles();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Role> getRoleById(int id) {
+    public ResponseEntity<RoleDto> getRoleById(int id) {
         return roleService.findRoleById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Role> createRole(RoleDto roleDto) {
+    public ResponseEntity<RoleDto> createRole(RoleDto roleDto) {
         return roleService.saveRole(roleDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Role> updateRoleById(int id, RoleDto roleDto) {
+    public ResponseEntity<RoleDto> updateRoleById(int id, RoleDto roleDto) {
         return roleService.updateRoleById(id, roleDto);
     }
 

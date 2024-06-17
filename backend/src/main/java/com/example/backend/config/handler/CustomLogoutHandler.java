@@ -1,4 +1,4 @@
-package com.example.backend.config;
+package com.example.backend.config.handler;
 
 import com.example.backend.http.HttpRequestService;
 import com.example.backend.security.jwt.JwtService;
