@@ -2,7 +2,7 @@ package com.example.backend.security.auth;
 
 import com.example.backend.config.AppConstants;
 import com.example.backend.payload.request.AuthRegistrationRequest;
-import com.example.backend.payload.request.AuthRequest;
+import com.example.backend.payload.request.AuthLoginRequest;
 import com.example.backend.payload.response.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,8 +25,8 @@ public class AuthController {
   }
 
   @PostMapping("/authenticate")
-  public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthRequest authRequest) {
-    return new ResponseEntity<>(authService.authenticate(authRequest), HttpStatus.OK);
+  public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthLoginRequest authLoginRequest) {
+    return new ResponseEntity<>(authService.authenticate(authLoginRequest), HttpStatus.OK);
   }
 
   @PostMapping("/refresh-token")
