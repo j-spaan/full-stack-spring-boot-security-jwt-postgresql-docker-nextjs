@@ -1,4 +1,4 @@
-package com.example.backend.config;
+package com.example.backend.config.handler;
 
 import com.example.backend.http.HttpConstants;
 import com.example.backend.i18n.I18nService;

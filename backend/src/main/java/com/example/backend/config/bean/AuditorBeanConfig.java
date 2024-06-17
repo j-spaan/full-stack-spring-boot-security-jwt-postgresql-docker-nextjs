@@ -1,4 +1,4 @@
-package com.example.backend.config;
+package com.example.backend.config.bean;
 
 import com.example.backend.audit.AuditorAwareImpl;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorAwareProvider")
-public class PersistenceConfig {
+public class AuditorBeanConfig {
 
     @Bean
     public AuditorAware<UUID> auditorAwareProvider() {

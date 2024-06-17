@@ -16,5 +16,7 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    // TODO add uniqueness constraint
     private String name;
 }
