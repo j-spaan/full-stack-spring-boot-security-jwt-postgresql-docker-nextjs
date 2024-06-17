@@ -1,6 +1,7 @@
 package com.example.backend.security.user;
 
 import com.example.backend.config.AppConstants;
+import com.example.backend.payload.request.UserDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,13 @@ public class UserController{
 
     @GetMapping
     @PreAuthorize("hasAuthority('admin:read')")
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<UserDto>> getAllUsers(){
         return userService.findAllUsers();
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('admin:read')")
-    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
         return userService.findUserById(id);
     }
 

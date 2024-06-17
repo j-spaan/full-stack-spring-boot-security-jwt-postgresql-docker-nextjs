@@ -1,28 +1,35 @@
 package com.example.backend.security.user;
 
 import com.example.backend.payload.exception.ResourceNotFoundException;
-import lombok.RequiredArgsConstructor;
+import com.example.backend.payload.request.UserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
-
-    private final UserRepository userRepository;
+public record UserServiceImpl(
+        UserRepository userRepository,
+        UserMapperService userMapperService) implements UserService {
 
     @Override
-    public ResponseEntity<List<User>> findAllUsers() {
+    public ResponseEntity<List<UserDto>> findAllUsers() {
         List<User> users = userRepository.findAll();
-        return ResponseEntity.ok(users);
+
+        List<UserDto> userDtoList = users.stream()
+                .map(userMapperService::convertToDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(userDtoList);
     }
 
     @Override
-    public ResponseEntity<User> findUserById(UUID id) {
-        return ResponseEntity.ok().body(this.findById(id));
+    public ResponseEntity<UserDto> findUserById(UUID id) {
+        return ResponseEntity.ok().body(
+                userMapperService.convertToDto(this.findById(id))
+        );
     }
 
     @Override
