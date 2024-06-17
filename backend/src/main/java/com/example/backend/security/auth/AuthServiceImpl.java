@@ -4,11 +4,10 @@ import com.example.backend.http.HttpRequestService;
 import com.example.backend.i18n.I18nService;
 import com.example.backend.payload.exception.InvalidCredentialsException;
 import com.example.backend.payload.request.AuthRegistrationRequest;
-import com.example.backend.payload.request.AuthRequest;
+import com.example.backend.payload.request.AuthLoginRequest;
 import com.example.backend.payload.response.AuthResponse;
 import com.example.backend.security.jwt.JwtService;
 import com.example.backend.security.password.PasswordService;
-import com.example.backend.security.role.Role;
 import com.example.backend.security.role.RoleService;
 import com.example.backend.security.token.TokenService;
 import com.example.backend.security.user.User;
@@ -126,7 +125,7 @@ public class AuthServiceImpl implements AuthService {
      * @throws BadCredentialsException if the provided email and password are invalid
      */
     @Override
-    public AuthResponse authenticate(AuthRequest request) {
+    public AuthResponse authenticate(AuthLoginRequest request) {
         final String emailOrUsername = request.getEmailOrUsername();
         User user = userService.findUserByEmailOrUsername(emailOrUsername, emailOrUsername);
         final String email = user.getEmail();
