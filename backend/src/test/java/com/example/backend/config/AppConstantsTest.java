@@ -25,22 +25,32 @@ class AppConstantsTest {
     }
 
     @Test
-    void testRequestUsersConstant() {
-        assertEquals("/users", AppConstants.Request.USERS);
-    }
-
-    @Test
     void testRequestAuthConstant() {
         assertEquals("/auth", AppConstants.Request.AUTH);
     }
 
     @Test
-    void testTableUsersConstant() {
-        assertEquals("users", AppConstants.Table.USERS);
+    void testRequestManagementConstant() {
+        assertEquals("/management/**", AppConstants.Request.MANAGEMENT);
+    }
+
+    @Test
+    void testRequestUsersConstant() {
+        assertEquals("/users", AppConstants.Request.USERS);
+    }
+
+    @Test
+    void testTableRolesConstant() {
+        assertEquals("roles", AppConstants.Table.ROLES);
     }
 
     @Test
     void testTableTokensConstant() {
         assertEquals("tokens", AppConstants.Table.TOKENS);
+    }
+
+    @Test
+    void testTableUsersConstant() {
+        assertEquals("users", AppConstants.Table.USERS);
     }
 }
