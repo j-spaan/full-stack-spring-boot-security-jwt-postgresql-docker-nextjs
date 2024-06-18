@@ -1,8 +1,9 @@
 package com.example.backend.config;
 
+import com.example.backend.config.handler.CustomAccessDeniedHandler;
 import com.example.backend.config.handler.CustomLogoutHandler;
 import com.example.backend.config.handler.CustomLogoutSuccessHandler;
-import com.example.backend.config.handler.UnauthorizedHandler;
+import com.example.backend.config.handler.CustomAuthenticationEntryPointHandler;
 import com.example.backend.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +33,9 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final UnauthorizedHandler unauthorizedHandler;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+
+    private final CustomAuthenticationEntryPointHandler authenticationEntryPointHandler;
 
     private static final String ADMIN = "ADMIN";
     private static final String MANAGER = "MANAGER";
@@ -55,7 +58,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+                .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(authenticationEntryPointHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(WHITE_LIST_URL)

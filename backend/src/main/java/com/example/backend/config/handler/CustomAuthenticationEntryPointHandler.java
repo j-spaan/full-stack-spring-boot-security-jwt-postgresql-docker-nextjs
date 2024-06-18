@@ -17,7 +17,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class UnauthorizedHandler implements AuthenticationEntryPoint {
+public class CustomAuthenticationEntryPointHandler implements AuthenticationEntryPoint {
 
     private final Gson gson;
 
@@ -39,7 +39,7 @@ public class UnauthorizedHandler implements AuthenticationEntryPoint {
         // Create response body
         UnauthorizedResponse unauthorizedResponse = new UnauthorizedResponse();
         unauthorizedResponse.setType(errorUri);
-        unauthorizedResponse.setDetail(i18nService.getMessage("unauthorized"));
+        unauthorizedResponse.setDetail(i18nService.getMessage("auth.handler.incorrect.details"));
         unauthorizedResponse.setInstance(request.getRequestURI());
 
         String serializedResponse = gson.toJson(unauthorizedResponse);
