@@ -248,8 +248,8 @@ public class JwtServiceImpl implements JwtService {
    */
   private void logErrorMessage(String code, String error) {
     log.error(i18nService.getLogMessage(code),
-            httpRequestService.getIp(),
-            httpRequestService.getUsername(),
+            httpRequestService.extractIp(),
+            httpRequestService.extractUsername(),
             error
     );
   }
