@@ -19,6 +19,7 @@ public final class AppConstants {
     }
 
     public static final class Table {
+        public static final String PERMISSIONS = "permissions";
         public static final String ROLES = "roles";
         public static final String TOKENS = "tokens";
         public static final String USERS = "users";
