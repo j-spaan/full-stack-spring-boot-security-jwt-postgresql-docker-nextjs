@@ -138,7 +138,7 @@ public class AuthServiceImpl implements AuthService {
         // TODO Use mapper to model and model to mapper
         AuthResponse authResponse = new AuthResponse();
         authResponse.setDetail(i18nService.getMessage("auth.si.authenticate.success", user.getFirstName()));
-        authResponse.setInstance(httpRequestService.getUri());
+        authResponse.setInstance(httpRequestService.getRequestUri());
         authResponse.setAccessToken(jwt);
         authResponse.setRefreshToken(refreshToken);
         return authResponse;
@@ -164,7 +164,7 @@ public class AuthServiceImpl implements AuthService {
 
         AuthResponse authResponse = new AuthResponse();
         authResponse.setDetail(i18nService.getMessage("auth.si.refresh-token.success"));
-        authResponse.setInstance(httpRequestService.getUri());
+        authResponse.setInstance(httpRequestService.getRequestUri());
         authResponse.setAccessToken(jwt);
         authResponse.setRefreshToken(refreshToken);
         return authResponse;

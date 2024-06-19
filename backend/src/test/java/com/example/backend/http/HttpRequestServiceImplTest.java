@@ -27,29 +27,29 @@ class HttpRequestServiceImplTest {
     private HttpRequestServiceImpl httpRequestServiceImpl;
 
     @Test
-    void testGetUsername_WithPrincipal() {
+    void testExtractUsername_WithPrincipal() {
         mockPrincipal("testUser");
-        assertEquals("testUser", httpRequestServiceImpl.getUsername());
+        assertEquals("testUser", httpRequestServiceImpl.extractUsername());
     }
 
     @Test
-    void testGetUsername_WithoutPrincipal() {
+    void testExtractUsername_WithoutPrincipal() {
         mockPrincipal(null);
         when(i18nService.getLogMessage("log.http.si.username.not.found")).thenReturn("Username not found error message");
-        assertNull(httpRequestServiceImpl.getUsername());
+        assertNull(httpRequestServiceImpl.extractUsername());
     }
 
     @Test
-    void testGetIp_WithXForwardedForHeader() {
+    void testExtractIp_WithXForwardedForHeader() {
         mockXForwardedForHeader("127.100.1.1, 127.100.1.2");
-        assertEquals("127.100.1.1", httpRequestServiceImpl.getIp());
+        assertEquals("127.100.1.1", httpRequestServiceImpl.extractIp());
     }
 
     @Test
-    void testGetIp_WithoutXForwardedForHeader() {
+    void testExtractIp_WithoutXForwardedForHeader() {
         mockXForwardedForHeader(null);
         when(httpServletRequest.getRemoteAddr()).thenReturn("127.100.1.1");
-        assertEquals("127.100.1.1", httpRequestServiceImpl.getIp());
+        assertEquals("127.100.1.1", httpRequestServiceImpl.extractIp());
     }
 
     @Test
@@ -67,20 +67,32 @@ class HttpRequestServiceImplTest {
     }
 
     @Test
-    void testGetBearerToken_WithBearerToken() {
+    void testGetRequestUri_WithUri() {
+        when(httpServletRequest.getRequestURI()).thenReturn("/api/v1/test");
+        assertEquals("/api/v1/test", httpRequestServiceImpl.getRequestUri());
+    }
+
+    @Test
+    void testGetRequestUri_WithoutUri() {
+        when(httpServletRequest.getRequestURI()).thenReturn("");
+        assertEquals("", httpRequestServiceImpl.getRequestUri());
+    }
+
+    @Test
+    void testExtractBearerToken_WithBearerToken() {
         String bearerToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikpv";
         when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(bearerToken);
         assertEquals(bearerToken.substring(HttpConstants.Header.BEARER.length()).trim(), httpRequestServiceImpl.extractBearerToken());
     }
 
     @Test
-    void testGetBearerToken_WithoutBearerToken() {
+    void testExtractBearerToken_WithoutBearerToken() {
         when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(null);
         assertThrows(InvalidBearerTokenException.class, () -> httpRequestServiceImpl.extractBearerToken());
     }
 
     @Test
-    void testGetBearerToken_WithInvalidBearerToken() {
+    void testExtractBearerToken_WithInvalidBearerToken() {
         String invalidBearerToken = "Invalid eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikpv";
         when(httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn(invalidBearerToken);
         assertThrows(InvalidBearerTokenException.class, () -> httpRequestServiceImpl.extractBearerToken());

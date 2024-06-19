@@ -38,11 +38,11 @@ public record HttpRequestServiceImpl(
 ) implements HttpRequestService {
 
     /**
-     * Get the username of the principal using the Http Servlet Request.
+     * Extract the username of the principal using the Http Servlet Request.
      * @return username of the principal
      */
     @Override
-    public String getUsername() {
+    public String extractUsername() {
         Principal httpUserPrincipal = httpServletRequest.getUserPrincipal();
         if (httpUserPrincipal == null) {
             log.error(i18nService.getLogMessage("log.http.si.username.not.found"));
@@ -51,11 +51,11 @@ public record HttpRequestServiceImpl(
         return httpUserPrincipal.getName();
     }
 
-    /** Get the client IP using the Http Servlet Request.
+    /** Extract the client IP from the X-Forwarded-For Header using the Http Servlet Request.
      * @return client IP
      */
     @Override
-    public String getIp() {
+    public String extractIp() {
         final String xffHeader = httpServletRequest.getHeader(HttpConstants.Header.X_FORWARDED_FOR);
         if (xffHeader == null){
             return httpServletRequest.getRemoteAddr();
@@ -75,11 +75,11 @@ public record HttpRequestServiceImpl(
      * @return request URI
      */
     @Override
-    public String getUri() {
+    public String getRequestUri() {
         return httpServletRequest.getRequestURI();
     }
 
-    /** Get the bearer token from the authorization header using the Http Servlet Request.
+    /** Extract the bearer token from the authorization header using the Http Servlet Request.
      * @return bearer token
      */
     @Override

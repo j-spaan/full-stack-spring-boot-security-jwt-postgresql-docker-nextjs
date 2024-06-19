@@ -6,9 +6,9 @@ package com.example.backend.http;
  * @see com.example.backend.http.HttpRequestServiceImpl
  */
 public interface HttpRequestService {
-    String getUsername();
-    String getIp();
+    String extractUsername();
+    String extractIp();
     String getAuthorizationHeader();
-    String getUri();
+    String getRequestUri();
     String extractBearerToken();
 }

@@ -47,7 +47,7 @@ public record RoleServiceImpl(
     public ResponseEntity<RoleDto> saveRole(RoleDto roleDto) {
         Role newRole = roleMapperService.convertToEntity(roleDto);
         return ResponseEntity.created(
-                URI.create(httpRequestService.getUri()))
+                URI.create(httpRequestService.getRequestUri()))
                 .body(roleMapperService.convertToDto(roleRepository.save(newRole)));
     }
 
