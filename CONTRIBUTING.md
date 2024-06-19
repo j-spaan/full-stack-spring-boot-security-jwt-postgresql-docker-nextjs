@@ -1,6 +1,6 @@
-# Contributing to [Project Name]
+# Contributing to the full-stack-spring-boot-security-jwt-postgresql-docker-nextjs Project
 
-First off, thank you for considering contributing to our project! The following is a set of guidelines for contributing to [Project Name]. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
+First off, thank you for considering contributing to our project! The following is a set of guidelines for contributing to the full-stack-spring-boot-security-jwt-postgresql-docker-nextjs Project. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
 ## Table of Contents
 
