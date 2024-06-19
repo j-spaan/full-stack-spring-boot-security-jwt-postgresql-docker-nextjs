@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -45,10 +44,10 @@ public class User implements UserDetails {
 
   @JsonIgnore
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "user_roles",
-          joinColumns = @JoinColumn(name = "user_id"),
-          inverseJoinColumns = @JoinColumn(name = "role_id"))
-  private Set<Role> roles;
+  @JoinTable(name = "users_roles",
+          joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+          inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+  private Collection<Role> roles;
 
   @JsonIgnore
   @OneToMany(mappedBy = "user")
@@ -56,9 +55,11 @@ public class User implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return getRoles().stream()
-            .map(role -> new SimpleGrantedAuthority(role.getName()))
-            .toList();
+      return getRoles().stream()
+              .map(Role::getPermissions)
+              .flatMap(Collection::stream)
+              .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+              .toList();
   }
 
   @Override
