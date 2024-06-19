@@ -20,6 +20,11 @@ class HttpConstantsTest {
     }
 
     @Test
+    void testBodyInstantiation() {
+        assertThrows(UnsupportedOperationException.class, HttpConstants.Body::new);
+    }
+
+    @Test
     void testXForwardedForConstant() {
         assertEquals("X-Forwarded-For", HttpConstants.Header.X_FORWARDED_FOR);
     }
@@ -27,5 +32,10 @@ class HttpConstantsTest {
     @Test
     void testBearerForConstant() {
         assertEquals("Bearer ", HttpConstants.Header.BEARER);
+    }
+
+    @Test
+    void testUtf8Constant() {
+        assertEquals("UTF-8", HttpConstants.Body.UTF_8);
     }
 }
