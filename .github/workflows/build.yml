@@ -51,18 +51,24 @@ jobs:
 
     - name: Set up Docker Compose
       run: |
+        cd backend
         docker-compose up -d
 
     - name: Build with Maven
       run: mvn clean install
+      working-directory: backend
 
     - name: Run tests
       run: mvn test
+      working-directory: backend
 
     - name: Build Docker image
       run: |
         docker build -t your-dockerhub-username/your-image-name:latest .
         docker push your-dockerhub-username/your-image-name:latest
+      working-directory: backend
 
     - name: Tear down Docker Compose
-      run: docker-compose down
+      run: |
+        cd backend
+        docker-compose down
