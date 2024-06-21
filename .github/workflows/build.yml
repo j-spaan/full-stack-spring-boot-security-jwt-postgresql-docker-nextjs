@@ -64,8 +64,8 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t your-dockerhub-username/your-image-name:latest .
-        docker push your-dockerhub-username/your-image-name:latest
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/springboot-backend:latest .
+        docker push ${{ secrets.DOCKER_USERNAME }}/springboot-backend:latest
       working-directory: backend
 
     - name: Tear down Docker Compose
