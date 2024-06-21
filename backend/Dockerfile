@@ -1,5 +1,5 @@
 # Use an official Maven image to build the app
-FROM maven:3.8.7-eclipse-temurin-21 as build
+FROM maven:3.9.7-eclipse-temurin-21 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -21,7 +21,7 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 # Expose the port the app runs on
-EXPOSE 8080
+EXPOSE 8081
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
